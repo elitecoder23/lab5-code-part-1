@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <math.h>
+
+
+/*-----------------------------------------------------------------------------
+-	                            Defines
+-----------------------------------------------------------------------------*/
+
+
+/*-----------------------------------------------------------------------------
+-	                            Prototypes
+-----------------------------------------------------------------------------*/
+	int close_to (double tolerance, double point, double value);
+	double mag(double x, double y, double z);
+	double max;
+	double min;
+	double value;
+	double distance (double totalT);
+/*----------------------------------------------------------------------------
+-							  Implementation
+-----------------------------------------------------------------------------*/
+int main(void) {
+    double gx, gy, gz;
+	int t;
+	double ti, tf, totalT, xt;
+	
+	printf("Declan Creadon\n");
+	printf("Netid: dcreadon\n");
+	scanf("%lf, %lf, %lf, %lf", &t, &gx, &gy, &gz);
+	printf("Ok, I'm now receiving data.\n");
+	
+	printf("I'm waiting");
+    while (close_to (0.25, 1.0, mag(gx, gy, gz))) {	
+	scanf("%d, %lf, %lf, %lf", &t, &gx, &gy, &gz);
+		if (close_to(15, 0, (t % 500))) {
+			printf(".");
+		}
+		fflush(stdout);
+    }
+	printf("\n");
+	ti = t;
+	
+	printf("\tHelp me! I'm Falling");
+
+	while (close_to (0.25, 1.0, mag(gx, gy, gz)) == 0) {
+		scanf("%d, %lf, %lf, %lf", &t, &gx, &gy, &gz);
+		if (close_to(10, 0, (t % 100))) {
+			printf("!");
+		}
+		fflush(stdout);
+	}
+	printf("\n");
+	
+	tf = t;
+	totalT = (tf - ti);
+	totalT = (totalT / 1000);
+	xt = distance(totalT);
+	
+	printf("\t\tOuch! I fell %.3lf meters in %.3lf seconds", xt, totalT);
+	
+    return 0;
+
+}
+/* Put your functions here */
+	double mag(double x, double y, double z) {
+		double accel = sqrt((x * x) + (y * y) + (z * z));
+		return (accel);
+	}
+	int close_to (double tolerance, double point, double value) {
+		double test1 = point + tolerance;
+		double test2 = point - tolerance;
+	
+	if ((value <= test1) && (value >= test2)){
+		return 1;
+	}
+	else {
+		return 0;
+	}
+	}
+	
+	double distance (double totalT) {
+		double x1 = 0.5 * 9.8 * (totalT * totalT);
+		return x1;
+	}
